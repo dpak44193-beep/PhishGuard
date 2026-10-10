@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+.env
+
+# ML artifacts (never commit trained models)
+ml/models/artifacts/*.joblib
+ml/models/artifacts/*.pkl
+ml/models/artifacts/*.h5
+ml/data/raw/
+ml/data/processed/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Node / Frontend
+node_modules/
+frontend/dist/
+frontend/.vite/
+extension/dist/
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+.claude/
+*.swp
+*.swo
+.DS_Store
+
+# Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Secrets
+.env
+*.pem
+*.key

@@ -1,0 +1,28 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@layer base {
+  body {
+    @apply bg-soc-bg text-soc-text font-mono;
+  }
+
+  ::selection {
+    @apply bg-soc-accent/30;
+  }
+}
+
+/* Custom scrollbar — webkit */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0d1117;
+}
+::-webkit-scrollbar-thumb {
+  background: #21262d;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #30363d;
+}

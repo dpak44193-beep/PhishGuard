@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "8001:8000"
+    env_file: .env
+    volumes:
+      - ./ml/models/artifacts:/app/ml/models/artifacts:ro
+      - phishguard_db:/app/data
+    restart: unless-stopped
+
+  # Uncomment to use PostgreSQL instead of SQLite
+  # postgres:
+  #   image: postgres:16-alpine
+  #   environment:
+  #     POSTGRES_USER: phishguard
+  #     POSTGRES_PASSWORD: phishguard
+  #     POSTGRES_DB: phishguard
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - pg_data:/var/lib/postgresql/data
+
+volumes:
+  phishguard_db:
+  # pg_data:
