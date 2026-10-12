@@ -86,6 +86,11 @@ export default function ScanPage() {
                 <div className="mt-1 text-sm text-soc-muted">
                   Score {result.risk_score.toFixed(2)} · ML {result.ml_probability.toFixed(2)} · Mode {result.scan_mode}
                 </div>
+                {result.verdict === 'no_threat_detected' || result.verdict === 'safe' ? (
+                  <p className="mt-2 text-xs text-amber-300">
+                    No threat detected is not a guarantee that this URL is safe. Provider no-matches may reflect missing coverage.
+                  </p>
+                ) : null}
               </div>
 
               <div className="rounded-xl border border-soc-border bg-soc-bg/60 p-4 text-sm text-soc-muted">

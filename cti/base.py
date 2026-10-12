@@ -7,6 +7,7 @@ from typing import Any, Optional
 class CTIStatus(str, Enum):
     LIVE = "live"
     MOCK = "mock"
+    NOT_CONFIGURED = "not_configured"
     UNKNOWN = "unknown"
     ERROR = "error"
     TIMEOUT = "timeout"

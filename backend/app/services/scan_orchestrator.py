@@ -51,6 +51,7 @@ async def orchestrate_scan(request: ScanRequest, session: AsyncSession) -> ScanR
             score=ml_prob,
             model_version=MLService.version(),
             thresholds=MLService.decision_thresholds(),
+            model_metadata=MLService.metadata(),
         ),
         cti=cti_result,
     )
@@ -105,7 +106,11 @@ def _build_indicators(ml_prob, cti_responses) -> list[ThreatIndicator]:
                 description=f"URL flagged by {cti.source} (score: {cti.score:.0%})",
                 source=cti.source,
             ))
-        elif cti.status in {CTIStatus.ERROR, CTIStatus.TIMEOUT, CTIStatus.UNKNOWN}:
+        elif cti.status in {
+            CTIStatus.ERROR,
+            CTIStatus.TIMEOUT,
+            CTIStatus.UNKNOWN,
+        }:
             indicators.append(ThreatIndicator(
                 type=f"{cti.source}_status",
                 severity="low",
@@ -135,7 +140,7 @@ def _build_cti_result(cti_responses) -> CTIResult:
         urlhaus=provider_map.get("urlhaus"),
         whois=provider_map.get("whois"),
         enriched=any(
-            evidence is not None and evidence.status in {ProviderStatus.LIVE, ProviderStatus.MOCK}
+            evidence is not None and evidence.status == ProviderStatus.LIVE
             for evidence in provider_map.values()
         ),
     )

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export type RiskLevel = 'no_threat_detected' | 'safe' | 'suspicious' | 'malicious'
-export type ProviderStatus = 'live' | 'mock' | 'unknown' | 'error' | 'timeout'
+export type ProviderStatus = 'live' | 'mock' | 'not_configured' | 'unknown' | 'error' | 'timeout'
 export type ScanMode = 'full' | 'degraded' | 'ml_only' | 'failed'
 
 export type ThreatIndicator = {
@@ -46,6 +46,7 @@ export type ScanResult = {
       score: number
       model_version?: string | null
       thresholds: Record<string, number>
+      model_metadata: Record<string, unknown>
     }
     cti: CtiEvidence
   } | null

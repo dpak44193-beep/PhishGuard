@@ -10,6 +10,7 @@ from app.models.scan import ScanMode
 from app.models.threat import RiskLevel
 from app.services.decision_engine import DecisionEngine, DEFAULT_DECISION_THRESHOLDS
 from cti.base import CTIResponse, CTIStatus
+from cti.risk_scorer import compute_risk_score
 
 
 def make_cti(
@@ -128,3 +129,14 @@ class TestScanModes:
         ]
         result = DecisionEngine.decide(0.2, ctis)
         assert result.scan_mode == ScanMode.DEGRADED
+
+
+def test_legacy_scorer_does_not_treat_mock_hit_as_live_cti_match():
+    score, level, explanation = compute_risk_score(
+        0.1,
+        [make_cti("urlhaus", CTIStatus.MOCK, 1.0, hit=True)],
+    )
+
+    assert score == 0.1
+    assert level == "no_threat_detected"
+    assert any("not proof" in item for item in explanation)

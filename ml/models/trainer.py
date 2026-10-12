@@ -93,7 +93,7 @@ def fit_calibrated_bundle(
         "combiner": None,
         "thresholds": thresholds_cfg,
         "feature_order": list(FEATURE_ORDER),
-        "version": "base-model-v2",
+        "version": "base-model-v3",
     }
 
     metadata = {
@@ -103,9 +103,14 @@ def fit_calibrated_bundle(
     return bundle, thresholds_cfg, metadata, {"safe": safe_threshold, "suspicious": suspicious_threshold}
 
 
-def save_model(bundle: dict[str, object], name: str = "phishguard_model.joblib") -> Path:
-    ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
-    path = ARTIFACT_DIR / name
+def save_model(
+    bundle: dict[str, object],
+    name: str | Path = "phishguard_model.joblib",
+) -> Path:
+    path = Path(name)
+    if not path.is_absolute():
+        path = ARTIFACT_DIR / path
+    path.parent.mkdir(parents=True, exist_ok=True)
     joblib.dump(bundle, path)
     return path
 

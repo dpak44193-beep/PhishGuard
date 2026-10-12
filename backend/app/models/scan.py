@@ -15,6 +15,7 @@ class ScanRequest(BaseModel):
 class ProviderStatus(str, Enum):
     LIVE = "live"
     MOCK = "mock"
+    NOT_CONFIGURED = "not_configured"
     UNKNOWN = "unknown"
     ERROR = "error"
     TIMEOUT = "timeout"
@@ -81,6 +82,7 @@ class MLEvidence(BaseModel):
     score: float
     model_version: Optional[str] = None
     thresholds: Dict[str, float] = Field(default_factory=dict)
+    model_metadata: Dict[str, Any] = Field(default_factory=dict)
 
 
 class ScanEvidence(BaseModel):

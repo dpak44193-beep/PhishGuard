@@ -17,11 +17,41 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "backend"))
 
 from app.main import app  # noqa: E402
+from app.config import settings  # noqa: E402
+from app.services.ml_service import MLService  # noqa: E402
+from ml.features.extractor import FEATURE_ORDER  # noqa: E402
 
 
 @pytest_asyncio.fixture
-async def client():
+async def client(monkeypatch):
     from app.db.database import init_db
+    monkeypatch.setattr(settings, "cti_mock", True)
+
+    def predict_for_api_contract(vector):
+        return 0.99 if vector[FEATURE_ORDER.index("suspicious_keywords")] else 0.1
+
+    monkeypatch.setattr(MLService, "predict", predict_for_api_contract)
+    monkeypatch.setattr(MLService, "version", lambda: "test-model-v1")
+    monkeypatch.setattr(
+        MLService,
+        "metadata",
+        lambda: {
+            "artifact_version": "test-model-v1",
+            "training_date_utc": "2026-10-10T00:00:00+00:00",
+            "dataset_sources": {"source_url": "https://example.org/data"},
+            "feature_schema": {
+                "version": "test-feature-schema-v1",
+                "names": list(FEATURE_ORDER),
+                "pipeline_steps": ["scaler", "model"],
+            },
+            "test_metrics": {"accuracy": 1.0},
+        },
+    )
+    monkeypatch.setattr(
+        MLService,
+        "decision_thresholds",
+        lambda: {"suspicious": 0.6, "malicious": 0.9},
+    )
     await init_db()  # create tables; lifespan doesn't fire with ASGITransport
     async with AsyncClient(
         transport=ASGITransport(app=app),
@@ -58,9 +88,19 @@ async def test_scan_legit_url(client):
     assert isinstance(data["indicators"], list)
     assert isinstance(data["explanation"], list)
     assert data["evidence"]["ml"]["score"] == data["ml_probability"]
+    ml_evidence = data["evidence"]["ml"]
+    assert ml_evidence["model_version"] == "test-model-v1"
+    assert ml_evidence["model_metadata"]["artifact_version"] == "test-model-v1"
+    assert ml_evidence["model_metadata"]["training_date_utc"]
+    assert ml_evidence["model_metadata"]["dataset_sources"]["source_url"]
+    assert ml_evidence["model_metadata"]["feature_schema"]["names"] == FEATURE_ORDER
+    assert ml_evidence["model_metadata"]["test_metrics"]["accuracy"] == 1.0
     assert data["cti"]["virustotal"]["status"] == "mock"
     assert data["cti"]["urlhaus"]["status"] == "mock"
     assert data["cti"]["whois"]["status"] == "mock"
+    assert data["cti"]["virustotal"]["hit"] is None
+    assert data["cti"]["virustotal"]["score"] is None
+    assert data["cti"]["enriched"] is False
 
 
 @pytest.mark.asyncio
@@ -136,10 +176,25 @@ async def test_history_limit_respected(client):
 @pytest.mark.asyncio
 async def test_history_contains_scanned_url(client):
     target = "https://history-check-unique.com"
-    await client.post("/api/scan", json={"url": target})
+    created = await client.post(
+        "/api/scan",
+        json={"url": target, "source": "extension"},
+    )
+    assert created.status_code == 200
     resp = await client.get("/api/history?limit=50")
-    urls = [r["url"] for r in resp.json()]
-    assert target in urls
+    stored = next(record for record in resp.json() if record["url"] == target)
+    assert stored["id"] == created.json()["id"]
+    assert stored["source"] == "extension"
+
+
+@pytest.mark.asyncio
+async def test_scan_api_failure_for_invalid_scheme(client):
+    response = await client.post(
+        "/api/scan",
+        json={"url": "ftp://example.com/resource"},
+    )
+
+    assert response.status_code == 422
 
 
 # ── Export ─────────────────────────────────────────────────────────────────────

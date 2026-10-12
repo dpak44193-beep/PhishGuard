@@ -2,7 +2,7 @@
 
 ****ML-powered phishing URL detection with real-time CTI enrichment, FastAPI backend, SOC dashboard, and Chrome extension.****
 
-PhishGuard is a full-stack security tool built for SOC analysts. It combines a 30-feature URL classifier (XGBoost + RandomForest ensemble when XGBoost is installed, otherwise RandomForest) with live threat intelligence enrichment from VirusTotal, URLhaus, and WHOIS to produce a weighted risk score for any URL — in under a second.
+PhishGuard is a full-stack security tool built for SOC analysts. It returns a 30-feature ML phishing probability alongside separate, status-labelled VirusTotal, URLhaus, and WHOIS evidence. CTI lookups can corroborate a detection; a provider no-match is not proof that a URL is safe.
 
 ---
 
@@ -23,13 +23,7 @@ PhishGuard is a full-stack security tool built for SOC analysts. It combines a 3
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-****Weighted risk score:****  `score = 0.40·ML + 0.30·VT + 0.20·URLhaus + 0.10·WHOIS`
-
-| Score | Level |
-|---|---|
-| < 0.30 | Safe |
-| 0.30 – 0.65 | Suspicious |
-| ≥ 0.65 | Malicious |
+****Scan outcome:**** the ML probability and provider results are returned as separate evidence. The final verdict applies the decision policy to the ML thresholds and qualifying live CTI signals; `no_threat_detected` does not assert that the URL is safe.
 
 ---
 
@@ -58,7 +52,7 @@ phishguard/
 │   ├── urlhaus.py      abuse.ch URLhaus adapter
 │   ├── whois_lookup.py python-whois adapter
 │   ├── mock_adapters.py dev/test mock layer
-│   └── risk_scorer.py  weighted aggregation
+│   └── risk_scorer.py  legacy scoring utility (not used by scan orchestration)
 ├── frontend/           React 18 + Vite + Tailwind SOC dashboard
 │   └── src/
 │       ├── pages/      Dashboard, HistoryPage, ReportPage
@@ -168,11 +162,14 @@ Make sure the virtual environment is activated.
 **macOS / Linux / Windows**
 
 ```bash
+# Download the source CSV from UCI to the repository root first.
 python ml/data/download_dataset.py
 python ml/train.py
 ```
 
-Default training requires the labeled raw-URL CSV at `ml/data/raw/labeled_urls.csv`.
+The preparation command reads the local `PhiUSIIL_Phishing_URL_Dataset.csv`; it does not download, resolve, or visit any sample URL. The source is the UCI PhiUSIIL dataset, licensed CC BY 4.0. Its original labels are `0=phishing` and `1=legitimate`; the preparation step maps these to the model's `1=phishing` and `0=legitimate` convention. It writes the URL-only data to `ml/data/raw/labeled_urls.csv` and a provenance/statistics manifest beside it.
+
+Default training requires the prepared CSV. A source-checksum-matched manifest at `ml/data/raw/labeled_urls.manifest.json`, a verified derived-file checksum, and the recorded offline domain-extractor version are required before metrics can be marked eligible for final evaluation claims.
 Without that real labeled CSV, training stops with an error and does not replace the current model or metrics. Synthetic vectors are available only as an explicit development smoke test:
 
 ```bash
@@ -181,17 +178,27 @@ python ml/train.py --synthetic
 
 That command writes `phishguard_model.synthetic.joblib` and `synthetic_metrics.json`; those results are marked ineligible for final evaluation and do not overwrite the live model or authoritative `metrics.json`.
 
-Real-data training generates:
+Real-data training normalizes and deduplicates URL strings and splits by registrable domain into train, validation, and test sets. The manifest checksum is verified before training. Real-data training generates:
 
 ```text
 ml/models/artifacts/phishguard_model.joblib
 ```
 
+New model bundles record training time, data-source attribution/checksums, artifact version, the versioned 30-feature schema and exact order, fitted pipeline steps, and held-out test metrics. The backend checks schema/order, model feature count, and recorded preprocessing steps before accepting a bundle; scans return the ML metadata separately from provider evidence.
+
 XGBoost is optional. The default requirements support local training with RandomForest alone; install `xgboost` separately to enable the soft-voting ensemble.
 
 and prints the evaluation metrics.
 
-To use your own labeled URL dataset, place:
+When scikit-learn is unavailable but XGBoost's native package works, the separate research evaluation can be run with:
+
+```bash
+python ml/evaluate_native_xgboost.py
+```
+
+It verifies source and derived checksums, retains the 30-feature contract, uses a registrable-domain-disjoint train/validation/test split, tunes the XGBoost threshold on validation only, and reports a majority-class baseline plus grouped-bootstrap confidence intervals. Its JSON report and model are stored as `ml/data/processed/native_xgboost_experiment.json` and `ml/models/artifacts/phishguard_xgboost_native.research.json`; the artifact embeds its training/source/schema/test-metric metadata. This experiment does not train or replace the active RandomForest/XGBoost soft-voting model and is not deployment eligible.
+
+To use another labeled URL dataset, prepare a matching `labeled_urls.manifest.json` recording the source, collection date, label definitions, license, and attribution. Without a documented, checksum-matched manifest, training may be used for experimentation but is explicitly ineligible for final evaluation claims. Place the CSV at:
 
 ```text
 ml/data/raw/labeled_urls.csv
@@ -207,6 +214,8 @@ where:
 
 - `1` = phishing
 - `0` = legitimate
+
+Do not create URLs by appending guessed paths to domains or treat popularity rankings as verified benign URLs. Keep source snapshots and collection dates; labels from feeds are source annotations, not ground truth independently confirmed by PhishGuard.
 
 ---
 
@@ -235,8 +244,8 @@ Key settings in `.env`:
 | Variable | Default | Notes |
 |---|---|---|
 | `DATABASE_URL` | SQLite database at the repository root (`phishguard.db`) | Swap to `postgresql+asyncpg://...` for production |
-| `CTI_MOCK` | `true` | Set to `false` and add `VIRUSTOTAL_API_KEY` for live enrichment |
-| `VIRUSTOTAL_API_KEY` | *(empty)* | VirusTotal API key |
+| `CTI_MOCK` | `true` | `true` makes no provider calls and returns null mock evidence; `false` enables live URLhaus/WHOIS and optional VirusTotal |
+| `VIRUSTOTAL_API_KEY` | *(empty)* | Optional VirusTotal API key; absent key is explicitly not configured |
 | `ML_MODEL_PATH` | `ml/models/artifacts/phishguard_model.joblib` | Path to trained model |
 | `CORS_ORIGINS` | `["http://localhost:5173","http://localhost:3000"]` | JSON array |
 
@@ -312,7 +321,7 @@ Then:
 4. Click **Load unpacked**.
 5. Select the `extension/dist/` directory.
 
-The extension analyzes URL patterns locally and does not send visited URLs to the backend. Per-tab results are removed when a tab closes; recent scan history is stored on the device, limited to 100 entries, and expires after 24 hours. Use **Clear** in the popup to remove it sooner.
+Without a configured backend, the extension analyzes URL patterns locally. When a backend is configured, completed page navigations and manually submitted URLs are sent to that backend for ML and CTI analysis; suspicious URLs are analyzed as strings and are never opened by the scanner. Per-tab results are removed when a tab closes; recent scan history is stored on the device, limited to 100 entries, and expires after 24 hours. Use **Clear** in the popup to remove it sooner.
 
 For online ML and threat-intelligence results, train the model with `python ml/train.py`, deploy the FastAPI backend at a publicly reachable HTTPS URL, and set `CTI_MOCK=false` plus provider keys in the backend environment (never in the extension). Enter the backend base URL ending in `/api` in the popup and select **Connect**; Chrome asks permission for that backend origin. Without a deployed backend, scans use local URL-pattern checks only and are not a substitute for a reputation-service verdict.
 
@@ -321,7 +330,7 @@ The extension badge updates automatically on page navigation:
 | Badge | Meaning |
 |---|---|
 | `...` | Scanning |
-| `OK` | Safe |
+| `NTH` | No threat detected (not a safety guarantee) |
 | `!!` | Suspicious |
 | `BAD` | Malicious |
 
@@ -440,10 +449,19 @@ The feature extractor (`ml/features/extractor.py`) computes these for every URL 
 
 ****Classifier:**** When XGBoost is installed, a soft-voting classifier combines XGBoost (300 estimators, depth 6) and RandomForest (200 estimators, depth 10). Without XGBoost, training uses RandomForest alone. Both run in a `StandardScaler` pipeline.
 
-****Training data:**** `python ml/train.py` uses labeled raw URLs only. `python ml/train.py --synthetic` is an isolated development smoke test; its metrics are not a real-world performance estimate. The legacy local model and `metrics.json` were produced from synthetic data and are explicitly marked as ineligible for final evaluation.
+****Training data:**** `python ml/train.py` uses the prepared labeled raw URLs only. To preserve the existing default artifact, train into a new, non-existing directory:
 
-The Kaggle feature-table experiment writes a separate `kaggle_phishguard_model.joblib` and `kaggle_metrics.json`. Its 50 numeric inputs do not match the live scanner's 30 URL features, so it is research-only and cannot be loaded as the live URL model.
-| ROC-AUC | 1.0000 |
+```powershell
+.\backend\.venv\Scripts\python.exe ml\train.py --output-dir ml\models\artifacts\real_data_grouped_run_reproduction
+```
+
+The checked-in evaluation run is `ml/models/artifacts/real_data_grouped_run_20261012_final/` (`base-model-v3`). It used 234,687 UCI PhiUSIIL-derived observations and a 70/15/15 registrable-domain-grouped split; held-out accuracy was 0.9905, PR-AUC 0.9983, and ROC-AUC 0.9978. These are internal same-source metrics, not time-based or real-world accuracy. The run includes a 500-resample domain-cluster bootstrap. Training refuses to overwrite an existing `--output-dir`; the default canonical artifact remains unchanged. `python ml/train.py --synthetic` is a separate development smoke test, never real observations.
+
+To run inference with the evaluated artifact, explicitly set `ML_MODEL_PATH` to its `phishguard_model.joblib` path. The scan response includes the artifact version, training timestamp, source/license and hashes, feature schema, pipeline, and test metrics.
+
+The UCI feature-table experiment in `ml/train_kaggle_dataset.py` writes a separate `phiusiil_feature_research_model.joblib` and `phiusiil_feature_metrics.json`. It deduplicates by normalized URL and groups its holdout by registrable domain, but its 50 numeric inputs do not match the live scanner's 30 URL features, so it is research-only and cannot be loaded as the live URL model.
+
+The final live smoke input `https://example.com/` is still classified as suspicious by the trained artifact (ML probability 0.8786). Investigation traced this to a feature collision: its 30-value vector exactly matches 46 phishing-labeled training rows and no legitimate-labeled rows; no feature-order or preprocessing mismatch was found. The strict regression expectations for this and the IANA reserved-domain reference remain xfailed. This is unresolved and blocks promotion; do not interpret same-source holdout results as real-world performance. See [`REPORT.md`](./REPORT.md) and [`runtime-validation-report.md`](./runtime-validation-report.md) for root-cause evidence, metrics, limitations, tests, and reproduction steps.
 
 ---
 
@@ -456,7 +474,7 @@ The Kaggle feature-table experiment writes a separate `kaggle_phishguard_model.j
 | `WHOISAdapter` | python-whois | No |
 | `Mock*Adapter` | Deterministic dev stubs | No |
 
-Set `CTI_MOCK=false` in `.env` and add `VIRUSTOTAL_API_KEY` for live enrichment. The adapter selection is automatic — no code changes needed.
+Set `CTI_MOCK=false` in `.env` for live URLhaus/WHOIS lookups. VirusTotal is optional; set `VIRUSTOTAL_API_KEY` to enable it. Missing API keys are reported as not configured, not as a provider no-match.
 
 ---
 
@@ -511,7 +529,7 @@ Test coverage:
 | Suite | Tests | Scope |
 |---|---:|---|
 | `test_feature_extractor.py` | 31 | All 30 features, vector shape, edge cases |
-| `test_risk_scorer.py` | 16 | Weight math, thresholds, explanation bullets |
+| `test_risk_scorer.py` | 19 | Decision thresholds, provider-status behavior, and safety explanations |
 | `test_signals.py` | 20 | Obfuscation, URL decoding, Levenshtein, typosquatting |
 | `test_api.py` | 13 | All endpoints (health, scan, history, export, 422 validation) |
 | `RiskBadge.test.tsx` | 10 | All 4 risk levels, score display, Tailwind classes |
@@ -525,7 +543,7 @@ Test coverage:
 - ****All DB access**** routes through `backend/app/services/db_service.py`. No dialect-specific SQL anywhere.
 - ****Retrain**** the model after changing `FEATURE_ORDER`: `python3 ml/train.py`
 - ****Extension cache**** is 60 seconds per URL to avoid hammering the API on every sub-frame navigation.
-- ****CTI_MOCK=true**** (default) — safe to develop and test without any API keys.
+- ****CTI_MOCK=true**** (default) — no provider calls; returns explicit mock statuses and null hit/score values rather than fabricated provider results.
 
 ---
 

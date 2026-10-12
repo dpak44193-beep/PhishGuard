@@ -1,0 +1,1563 @@
+{
+  "accuracy": 0.9905,
+  "precision": 0.9844,
+  "recall": 0.9935,
+  "f1": 0.9889,
+  "false_positive_rate": 0.0117,
+  "pr_auc_average_precision": 0.9983,
+  "roc_auc": 0.9978,
+  "confusion_matrix": [
+    [
+      19942,
+      237
+    ],
+    [
+      98,
+      14926
+    ]
+  ],
+  "classification_report": {
+    "legitimate": {
+      "precision": 0.9951097804391218,
+      "recall": 0.9882551167054859,
+      "f1-score": 0.9916706034461324,
+      "support": 20179.0
+    },
+    "phishing": {
+      "precision": 0.9843698476554772,
+      "recall": 0.9934771033013845,
+      "f1-score": 0.988902507701991,
+      "support": 15024.0
+    },
+    "accuracy": 0.9904837655881601,
+    "macro avg": {
+      "precision": 0.9897398140472995,
+      "recall": 0.9908661100034353,
+      "f1-score": 0.9902865555740616,
+      "support": 35203.0
+    },
+    "weighted avg": {
+      "precision": 0.9905261725039607,
+      "recall": 0.9904837655881601,
+      "f1-score": 0.9904892305387103,
+      "support": 35203.0
+    }
+  },
+  "thresholds": {
+    "safe": 0.0643,
+    "suspicious": 0.1285
+  },
+  "bias_audit": {
+    "by_tld": [
+      {
+        "bucket": ".ac",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".academy",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ad",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ae",
+        "legit_count": 14,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".aero",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".africa",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ag",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".agency",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ai",
+        "legit_count": 10,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".al",
+        "legit_count": 4,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".am",
+        "legit_count": 10,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".amsterdam",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ao",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".app",
+        "legit_count": 28,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ar",
+        "legit_count": 29,
+        "false_positive_rate": 0.0345
+      },
+      {
+        "bucket": ".art",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".as",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".asia",
+        "legit_count": 8,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".at",
+        "legit_count": 62,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".au",
+        "legit_count": 356,
+        "false_positive_rate": 0.0506
+      },
+      {
+        "bucket": ".az",
+        "legit_count": 4,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ba",
+        "legit_count": 3,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".bb",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".bd",
+        "legit_count": 9,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".be",
+        "legit_count": 92,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".berlin",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".bg",
+        "legit_count": 25,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".bh",
+        "legit_count": 3,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".bio",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".biz",
+        "legit_count": 14,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".blog",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".bo",
+        "legit_count": 5,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".br",
+        "legit_count": 177,
+        "false_positive_rate": 0.0508
+      },
+      {
+        "bucket": ".bt",
+        "legit_count": 3,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".build",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".bw",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".by",
+        "legit_count": 6,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".bz",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ca",
+        "legit_count": 214,
+        "false_positive_rate": 0.0093
+      },
+      {
+        "bucket": ".capital",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".care",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".cat",
+        "legit_count": 6,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".cc",
+        "legit_count": 11,
+        "false_positive_rate": 0.0909
+      },
+      {
+        "bucket": ".cd",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".cern",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ch",
+        "legit_count": 69,
+        "false_positive_rate": 0.0145
+      },
+      {
+        "bucket": ".chat",
+        "legit_count": 3,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".church",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ci",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".city",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ck",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".cl",
+        "legit_count": 23,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".cloud",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".club",
+        "legit_count": 5,
+        "false_positive_rate": 1.0
+      },
+      {
+        "bucket": ".cm",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".cn",
+        "legit_count": 33,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".co",
+        "legit_count": 85,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".codes",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".coffee",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".com",
+        "legit_count": 10381,
+        "false_positive_rate": 0.0037
+      },
+      {
+        "bucket": ".company",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".cool",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".coop",
+        "legit_count": 8,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".cr",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".cu",
+        "legit_count": 3,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".cv",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".cy",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".cymru",
+        "legit_count": 3,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".cz",
+        "legit_count": 85,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".de",
+        "legit_count": 508,
+        "false_positive_rate": 0.0098
+      },
+      {
+        "bucket": ".design",
+        "legit_count": 3,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".dev",
+        "legit_count": 4,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".diamonds",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".dk",
+        "legit_count": 35,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".do",
+        "legit_count": 3,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".dz",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".earth",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ec",
+        "legit_count": 5,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".eco",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".edu",
+        "legit_count": 312,
+        "false_positive_rate": 0.0096
+      },
+      {
+        "bucket": ".ee",
+        "legit_count": 13,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".eg",
+        "legit_count": 3,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".email",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".energy",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".es",
+        "legit_count": 94,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".et",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".eu",
+        "legit_count": 103,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".eus",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".events",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".exchange",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".fi",
+        "legit_count": 50,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".film",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".fm",
+        "legit_count": 9,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".foundation",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".fr",
+        "legit_count": 216,
+        "false_positive_rate": 0.0278
+      },
+      {
+        "bucket": ".fun",
+        "legit_count": 1,
+        "false_positive_rate": 1.0
+      },
+      {
+        "bucket": ".ga",
+        "legit_count": 2,
+        "false_positive_rate": 1.0
+      },
+      {
+        "bucket": ".gal",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".gd",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ge",
+        "legit_count": 3,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".gg",
+        "legit_count": 3,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".gh",
+        "legit_count": 3,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".gi",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".global",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".gov",
+        "legit_count": 113,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".gr",
+        "legit_count": 58,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".gs",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".guru",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".hk",
+        "legit_count": 31,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".hn",
+        "legit_count": 3,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".holiday",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".house",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".hr",
+        "legit_count": 26,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ht",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".hu",
+        "legit_count": 31,
+        "false_positive_rate": 0.0968
+      },
+      {
+        "bucket": ".id",
+        "legit_count": 37,
+        "false_positive_rate": 0.027
+      },
+      {
+        "bucket": ".ie",
+        "legit_count": 75,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".il",
+        "legit_count": 47,
+        "false_positive_rate": 0.0638
+      },
+      {
+        "bucket": ".im",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".in",
+        "legit_count": 130,
+        "false_positive_rate": 0.0077
+      },
+      {
+        "bucket": ".info",
+        "legit_count": 111,
+        "false_positive_rate": 0.018
+      },
+      {
+        "bucket": ".int",
+        "legit_count": 7,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".io",
+        "legit_count": 73,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".iq",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ir",
+        "legit_count": 8,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".is",
+        "legit_count": 13,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".it",
+        "legit_count": 231,
+        "false_positive_rate": 0.013
+      },
+      {
+        "bucket": ".je",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".jm",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".jo",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".jp",
+        "legit_count": 333,
+        "false_positive_rate": 0.039
+      },
+      {
+        "bucket": ".ke",
+        "legit_count": 8,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".kh",
+        "legit_count": 5,
+        "false_positive_rate": 0.2
+      },
+      {
+        "bucket": ".koeln",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".kr",
+        "legit_count": 27,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".kw",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ky",
+        "legit_count": 3,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".kz",
+        "legit_count": 4,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".la",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".lb",
+        "legit_count": 3,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".lgbt",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".link",
+        "legit_count": 2,
+        "false_positive_rate": 1.0
+      },
+      {
+        "bucket": ".live",
+        "legit_count": 3,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".lk",
+        "legit_count": 12,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".london",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".lr",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ls",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".lt",
+        "legit_count": 21,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".lu",
+        "legit_count": 9,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".lv",
+        "legit_count": 9,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ma",
+        "legit_count": 4,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".marketing",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".md",
+        "legit_count": 4,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".me",
+        "legit_count": 23,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".media",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".menu",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".mil",
+        "legit_count": 62,
+        "false_positive_rate": 0.0484
+      },
+      {
+        "bucket": ".mk",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".mma",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".mn",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".mo",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".mobi",
+        "legit_count": 6,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".moe",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".mr",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".mt",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".mu",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".mv",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".mx",
+        "legit_count": 62,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".my",
+        "legit_count": 25,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".mz",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".na",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".name",
+        "legit_count": 5,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".net",
+        "legit_count": 600,
+        "false_positive_rate": 0.0017
+      },
+      {
+        "bucket": ".network",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".news",
+        "legit_count": 5,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ng",
+        "legit_count": 12,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ngo",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ni",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ninja",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".nl",
+        "legit_count": 224,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".no",
+        "legit_count": 69,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".np",
+        "legit_count": 4,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".nrw",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".nu",
+        "legit_count": 6,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".nyc",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".nz",
+        "legit_count": 85,
+        "false_positive_rate": 0.0235
+      },
+      {
+        "bucket": ".one",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".online",
+        "legit_count": 4,
+        "false_positive_rate": 1.0
+      },
+      {
+        "bucket": ".org",
+        "legit_count": 2427,
+        "false_positive_rate": 0.0029
+      },
+      {
+        "bucket": ".pa",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".paris",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".pe",
+        "legit_count": 5,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".pg",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ph",
+        "legit_count": 25,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".photo",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".photography",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".pk",
+        "legit_count": 12,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".pl",
+        "legit_count": 87,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".pro",
+        "legit_count": 4,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ps",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".pt",
+        "legit_count": 35,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".radio",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".re",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".rentals",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ro",
+        "legit_count": 52,
+        "false_positive_rate": 0.0192
+      },
+      {
+        "bucket": ".rocks",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".rs",
+        "legit_count": 23,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ru",
+        "legit_count": 140,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".rugby",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ruhr",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".run",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".rw",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".sa",
+        "legit_count": 5,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".sc",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".school",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".scot",
+        "legit_count": 6,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".se",
+        "legit_count": 75,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".sg",
+        "legit_count": 28,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".sharp",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".shop",
+        "legit_count": 3,
+        "false_positive_rate": 1.0
+      },
+      {
+        "bucket": ".si",
+        "legit_count": 28,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".sk",
+        "legit_count": 34,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".sn",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".space",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".st",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".store",
+        "legit_count": 3,
+        "false_positive_rate": 1.0
+      },
+      {
+        "bucket": ".su",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".sv",
+        "legit_count": 3,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".systems",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".sz",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".taxi",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".tech",
+        "legit_count": 4,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".tf",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".tg",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".th",
+        "legit_count": 18,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".tn",
+        "legit_count": 3,
+        "false_positive_rate": 0.3333
+      },
+      {
+        "bucket": ".to",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".today",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".tokyo",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".tools",
+        "legit_count": 3,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".tr",
+        "legit_count": 37,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".travel",
+        "legit_count": 6,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".tt",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".tv",
+        "legit_count": 25,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".tw",
+        "legit_count": 24,
+        "false_positive_rate": 0.0417
+      },
+      {
+        "bucket": ".tz",
+        "legit_count": 5,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ua",
+        "legit_count": 22,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ug",
+        "legit_count": 4,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".uk",
+        "legit_count": 896,
+        "false_positive_rate": 0.0815
+      },
+      {
+        "bucket": ".us",
+        "legit_count": 80,
+        "false_positive_rate": 0.125
+      },
+      {
+        "bucket": ".uy",
+        "legit_count": 5,
+        "false_positive_rate": 0.2
+      },
+      {
+        "bucket": ".va",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".vc",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ve",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".vegas",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".vn",
+        "legit_count": 24,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".vu",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".wales",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".website",
+        "legit_count": 2,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".win",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".work",
+        "legit_count": 2,
+        "false_positive_rate": 1.0
+      },
+      {
+        "bucket": ".world",
+        "legit_count": 3,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".ws",
+        "legit_count": 7,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".wtf",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".xyz",
+        "legit_count": 2,
+        "false_positive_rate": 1.0
+      },
+      {
+        "bucket": ".youtube",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".za",
+        "legit_count": 54,
+        "false_positive_rate": 0.037
+      },
+      {
+        "bucket": ".zm",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".zone",
+        "legit_count": 1,
+        "false_positive_rate": 0.0
+      },
+      {
+        "bucket": ".zw",
+        "legit_count": 3,
+        "false_positive_rate": 0.0
+      }
+    ],
+    "by_keyword_bucket": [
+      {
+        "bucket": "keyword_absent",
+        "legit_count": 20148,
+        "false_positive_rate": 0.0114
+      },
+      {
+        "bucket": "keyword_present",
+        "legit_count": 31,
+        "false_positive_rate": 0.2258
+      }
+    ]
+  },
+  "training_data": {
+    "kind": "uci_phiusiil_derived",
+    "source": {
+      "kind": "uci_phiusiil_derived",
+      "source_name": "PhiUSIIL Phishing URL (Website)",
+      "source_url": "https://archive.ics.uci.edu/dataset/967/phiusiil+phishing+url+dataset",
+      "source_doi": "https://doi.org/10.1016/j.cose.2023.103545",
+      "source_creator": [
+        "Arvind Prasad",
+        "Shalini Chandra"
+      ],
+      "source_repository_donated_date": "2024-03-03",
+      "source_observation_collection_window": null,
+      "source_observation_collection_note": "UCI describes the URLs as mostly latest but gives no precise per-observation collection period.",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "attribution": "Prasad, A. & Chandra, S. (2024). PhiUSIIL Phishing URL (Website) [Dataset]. UCI Machine Learning Repository. https://doi.org/10.1016/j.cose.2023.103545",
+      "source_label_definition": {
+        "0": "phishing",
+        "1": "legitimate"
+      },
+      "training_label_definition": {
+        "0": "legitimate",
+        "1": "phishing"
+      },
+      "source_to_training_label_mapping": {
+        "0": 1,
+        "1": 0
+      },
+      "labels_are_source_annotations": true,
+      "training_samples_are_live_url_fetches": false,
+      "source_file": "PhiUSIIL_Phishing_URL_Dataset.csv",
+      "source_file_sha256": "748ae7c7a677ac4ffc0eeefbee653dcef1d685b134ad2f5376596b92d79438ba",
+      "derived_file": "ml\\data\\raw\\labeled_urls.csv",
+      "derived_file_sha256": "1db2f5ce060de7b073c96d942ff180423e16a01392240bf33e5ca29bb917b4af",
+      "prepared_at_utc": "2026-10-10T05:22:40.524550+00:00",
+      "source_rows": 235795,
+      "source_columns": 55,
+      "source_missing_cells": 0,
+      "source_missing_cells_by_column": {},
+      "invalid_url_rows": 0,
+      "invalid_label_rows": 0,
+      "source_label_counts": {
+        "0": 100945,
+        "1": 134850
+      },
+      "conflicting_normalized_url_groups_removed": 1,
+      "conflicting_normalized_url_rows_removed": 2,
+      "duplicate_url_rows_removed": 1106,
+      "derived_rows": 234687,
+      "derived_label_counts": {
+        "0_legitimate": 134849,
+        "1_phishing": 99838
+      },
+      "registrable_domain_groups": 197708,
+      "registrable_domains_by_label": {
+        "0_legitimate": 132185,
+        "1_phishing": 65628
+      },
+      "domains_with_both_labels": 105,
+      "campaign_identifiers_available": false,
+      "split_group_key": "registrable_domain",
+      "registrable_domain_extractor": {
+        "package": "tldextract",
+        "version": "5.4.0",
+        "include_private_suffixes": true,
+        "network_suffix_list_fetch": false
+      },
+      "final_evaluation_eligible": true,
+      "limitations": [
+        "UCI provides no precise collection window for individual observations.",
+        "Labels are inherited from the authors; this preparation does not re-verify site content.",
+        "A registrable domain may have both labels; rows for each domain stay in one split.",
+        "No campaign identifiers are supplied, so campaign overlap cannot be independently measured.",
+        "URL strings are analyzed offline; none is visited, resolved, or crawled."
+      ]
+    },
+    "manifest": {
+      "rows": 234687,
+      "columns": [
+        "url",
+        "label",
+        "registrable_domain",
+        "source",
+        "source_label",
+        "source_row"
+      ],
+      "missing_cells_in_source": 0,
+      "label_counts": {
+        "0_legitimate": 134849,
+        "1_phishing": 99838
+      },
+      "deduplication": {
+        "normalization": "Lowercase scheme and host, IDNA-normalize host, remove default port, add root slash; preserve URL paths, queries, and fragments in output; ignore fragments only in duplicate identity.",
+        "conflicting_label_url_groups_removed": 1,
+        "duplicate_rows_removed": 1106
+      },
+      "domain_overlap": {
+        "group_key": "registrable_domain using bundled Public Suffix List snapshot",
+        "domains_with_both_labels": 105,
+        "campaign_overlap": "not measurable; source has no campaign IDs"
+      }
+    },
+    "manifest_path": "D:\\finnal year project\\PhishGuard-main\\PhishGuard-main\\ml\\data\\raw\\labeled_urls.manifest.json",
+    "final_evaluation_eligible": true,
+    "dataset": "D:\\finnal year project\\PhishGuard-main\\PhishGuard-main\\ml\\data\\raw\\labeled_urls.csv",
+    "sha256": "1db2f5ce060de7b073c96d942ff180423e16a01392240bf33e5ca29bb917b4af",
+    "sample_count": 234687,
+    "class_counts": {
+      "legitimate": 134849,
+      "phishing": 99838
+    }
+  },
+  "evaluation": {
+    "kind": "registrable_domain_grouped_url_csv_holdout",
+    "final_evaluation_eligible": true,
+    "test_sample_count": 35203,
+    "split_group_key": "registrable_domain",
+    "split_summary": {
+      "train": {
+        "rows": 164281,
+        "class_counts": {
+          "legitimate": 94459,
+          "phishing": 69822
+        },
+        "registrable_domains": 138563
+      },
+      "validation": {
+        "rows": 35203,
+        "class_counts": {
+          "legitimate": 20211,
+          "phishing": 14992
+        },
+        "registrable_domains": 29631
+      },
+      "test": {
+        "rows": 35203,
+        "class_counts": {
+          "legitimate": 20179,
+          "phishing": 15024
+        },
+        "registrable_domains": 29514
+      }
+    },
+    "threshold_source": "validation_base_model_probability",
+    "cti_used_for_training_metrics": false
+  }
+}

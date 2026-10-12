@@ -1,12 +1,19 @@
 from pathlib import Path
+import hashlib
+import json
 
 import numpy as np
 import pytest
+import tldextract
 from sklearn.ensemble import RandomForestClassifier
 
 from ml.features.extractor import FEATURE_ORDER
 from ml.models.evaluator import evaluate
-from ml.train import resolve_training_data, training_output_paths
+from ml.train import (
+    _bootstrap_metric_intervals,
+    resolve_training_data,
+    training_output_paths,
+)
 from ml.models import trainer
 
 
@@ -51,24 +58,130 @@ def test_synthetic_training_is_explicit_and_separated(tmp_path):
     assert metrics_path.name == "synthetic_metrics.json"
 
 
+def test_training_outputs_can_be_isolated_from_runtime_artifacts(tmp_path):
+    model_path, metrics_path = training_output_paths(
+        synthetic=False,
+        output_dir=tmp_path,
+    )
+
+    assert model_path == tmp_path / "phishguard_model.joblib"
+    assert metrics_path == tmp_path / "metrics.json"
+
+
+def test_training_refuses_to_overwrite_existing_output_directory(tmp_path):
+    from ml.train import main
+
+    with pytest.raises(SystemExit) as exc_info:
+        main(["--output-dir", str(tmp_path)])
+
+    assert exc_info.value.code == 2
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_cluster_bootstrap_returns_test_metric_intervals():
+    labels = np.array([0, 1, 0, 1, 0, 1, 0, 1])
+    scores = np.array([0.1, 0.9, 0.2, 0.8, 0.3, 0.7, 0.4, 0.6])
+    groups = np.array(["a", "a", "b", "b", "c", "c", "d", "d"])
+
+    intervals = _bootstrap_metric_intervals(
+        labels,
+        scores,
+        threshold=0.5,
+        groups=groups,
+        replicates=20,
+        seed=42,
+    )
+
+    assert set(intervals) == {
+        "accuracy",
+        "precision",
+        "recall",
+        "f1",
+        "false_positive_rate",
+        "pr_auc_average_precision",
+        "roc_auc",
+    }
+    assert all(len(bounds) == 2 and bounds[0] <= bounds[1] for bounds in intervals.values())
+
+
 def test_real_url_csv_records_provenance_and_feature_order(tmp_path):
     csv_path = tmp_path / "labeled_urls.csv"
     rows = [f"https://legitimate-{index}.com/,0" for index in range(10)]
     rows += [f"http://fake-login-{index}.xyz/verify,1" for index in range(10)]
     csv_path.write_text("url,label\n" + "\n".join(rows), encoding="utf-8")
+    source_path = tmp_path / "documented-source.csv"
+    source_path.write_text("source fixture\n", encoding="utf-8")
+    manifest = {
+        "provenance": {
+            "kind": "test_documented_source",
+            "source_url": "https://example.org/dataset",
+            "license": "CC BY 4.0",
+            "attribution": "Test attribution",
+            "source_file": str(source_path),
+            "source_file_sha256": hashlib.sha256(source_path.read_bytes()).hexdigest(),
+            "source_observation_collection_window": None,
+            "source_observation_collection_note": "Collection window documented as unknown.",
+            "registrable_domain_extractor": {
+                "package": "tldextract",
+                "version": tldextract.__version__,
+                "network_suffix_list_fetch": False,
+            },
+            "prepared_at_utc": "2026-01-01T00:00:00+00:00",
+            "derived_file_sha256": hashlib.sha256(csv_path.read_bytes()).hexdigest(),
+            "final_evaluation_eligible": True,
+        },
+        "dataset_summary": {"rows": 20},
+    }
+    csv_path.with_suffix(".manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
 
     X, y, urls, provenance = resolve_training_data(csv_path)
 
     assert X.shape == (20, len(FEATURE_ORDER))
     assert set(np.unique(y)) == {0, 1}
     assert len(urls) == 20
-    assert provenance["kind"] == "real_labeled_url_csv"
+    assert provenance["kind"] == "test_documented_source"
     assert provenance["final_evaluation_eligible"] is True
     assert provenance["class_counts"] == {"legitimate": 10, "phishing": 10}
     assert len(provenance["sha256"]) == 64
     model_path, metrics_path = training_output_paths(synthetic=False)
     assert model_path.name == "phishguard_model.joblib"
     assert metrics_path.name == "metrics.json"
+
+
+def test_real_url_csv_without_manifest_is_not_final_evaluation_eligible(tmp_path):
+    csv_path = tmp_path / "labeled_urls.csv"
+    rows = [f"https://legitimate-{index}.com/,0" for index in range(10)]
+    rows += [f"http://fake-login-{index}.xyz/verify,1" for index in range(10)]
+    csv_path.write_text("url,label\n" + "\n".join(rows), encoding="utf-8")
+
+    _, _, _, provenance = resolve_training_data(csv_path)
+
+    assert provenance["kind"] == "unverified_labeled_url_csv"
+    assert provenance["final_evaluation_eligible"] is False
+
+
+def test_real_url_csv_rejects_manifest_checksum_mismatch(tmp_path):
+    csv_path = tmp_path / "labeled_urls.csv"
+    rows = [f"https://legitimate-{index}.com/,0" for index in range(10)]
+    rows += [f"http://fake-login-{index}.xyz/verify,1" for index in range(10)]
+    csv_path.write_text("url,label\n" + "\n".join(rows), encoding="utf-8")
+    manifest = {
+        "provenance": {
+            "source_url": "https://example.org/dataset",
+            "license": "CC BY 4.0",
+            "attribution": "Test attribution",
+            "source_file": str(tmp_path / "documented-source.csv"),
+            "source_file_sha256": "0" * 64,
+            "source_observation_collection_window": None,
+            "source_observation_collection_note": "Collection window documented as unknown.",
+            "prepared_at_utc": "2026-01-01T00:00:00+00:00",
+            "derived_file_sha256": "0" * 64,
+        }
+    }
+    csv_path.with_suffix(".manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="checksum does not match"):
+        resolve_training_data(csv_path)
 
 
 def test_calibrated_thresholds_use_live_base_model_probability():

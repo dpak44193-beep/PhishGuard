@@ -46,6 +46,7 @@ FEATURE_ORDER = [
     "domain_digit_count", "url_shortener_flag", "brand_count",
     "num_dots_in_path", "query_length", "fragment_present", "multi_subdomain",
 ]
+FEATURE_SCHEMA_VERSION = "phishguard-url-lexical-30-v1"
 
 
 def _shannon_entropy(s: str) -> float:

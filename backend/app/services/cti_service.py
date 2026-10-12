@@ -51,11 +51,11 @@ async def enrich(url: str) -> List[CTIResponse]:
         if adapter is None:
             responses[provider] = CTIResponse(
                 source=provider,
-                status=CTIStatus.UNKNOWN,
+                status=CTIStatus.NOT_CONFIGURED,
                 hit=None,
                 score=None,
                 details={},
-                error="Provider not configured",
+                error=None,
             )
             continue
         tasks.append((provider, asyncio.ensure_future(adapter.lookup(url))))

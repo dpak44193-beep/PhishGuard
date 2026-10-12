@@ -4,8 +4,8 @@ type BadgeLevel = 'no_threat_detected' | 'safe' | 'suspicious' | 'malicious' | '
 
 const BADGE_COLORS: Record<BadgeLevel, string> = {
   pending:    '#58a6ff',
-  no_threat_detected: '#3fb950',
-  safe:       '#3fb950',
+  no_threat_detected: '#8b949e',
+  safe:       '#8b949e',
   suspicious: '#d29922',
   malicious:  '#f85149',
   unknown:    '#8b949e',
@@ -13,8 +13,8 @@ const BADGE_COLORS: Record<BadgeLevel, string> = {
 
 const BADGE_TEXT: Record<BadgeLevel, string> = {
   pending:    '...',
-  no_threat_detected: 'OK',
-  safe:       'OK',
+  no_threat_detected: 'NTH',
+  safe:       'NTH',
   suspicious: '!!',
   malicious:  'BAD',
   unknown:    '?',

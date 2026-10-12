@@ -7,8 +7,8 @@ import type { ScanResult } from './api'
 type Level = ScanResult['verdict']
 
 const LEVEL_STYLE: Record<Level | 'pending', { color: string; label: string }> = {
-  no_threat_detected: { color: '#3fb950', label: 'NO THREAT' },
-  safe:       { color: '#3fb950', label: 'SAFE'       },
+  no_threat_detected: { color: '#8b949e', label: 'NO THREAT DETECTED' },
+  safe:       { color: '#8b949e', label: 'NO THREAT DETECTED' },
   suspicious: { color: '#d29922', label: 'SUSPICIOUS' },
   malicious:  { color: '#f85149', label: 'MALICIOUS'  },
   unknown:    { color: '#8b949e', label: 'UNKNOWN'     },
@@ -229,6 +229,11 @@ function Popup() {
           <span>{style.label}</span>
         )}
       </div>
+      {(result?.verdict === 'no_threat_detected' || result?.verdict === 'safe') && (
+        <div style={{ color: '#d29922', fontSize: 10, lineHeight: 1.5, marginTop: -6, marginBottom: 10 }}>
+          No threat detected is not a guarantee that this URL is safe. Provider no-matches may reflect missing coverage.
+        </div>
+      )}
 
       {/* URL */}
       <div style={{ color: '#8b949e', fontSize: 11, marginBottom: 10, wordBreak: 'break-all', lineHeight: 1.4 }}>

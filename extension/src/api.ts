@@ -12,13 +12,23 @@ export interface ScanResult {
   source: 'extension'
   explanation: string[]
   indicators: Array<{ type: string; severity: string; description: string; source?: string }>
+  evidence?: {
+    ml: {
+      score: number
+      model_version?: string | null
+      thresholds: Record<string, number>
+      model_metadata: Record<string, unknown>
+    }
+  } | null
   cti?: {
     enriched: boolean
-    virustotal?: { status: string; hit: boolean | null; score: number | null; error?: string | null } | null
-    urlhaus?: { status: string; hit: boolean | null; score: number | null; error?: string | null } | null
-    whois?: { status: string; hit: boolean | null; score: number | null; error?: string | null } | null
+    virustotal?: { status: ProviderStatus; hit: boolean | null; score: number | null; error?: string | null } | null
+    urlhaus?: { status: ProviderStatus; hit: boolean | null; score: number | null; error?: string | null } | null
+    whois?: { status: ProviderStatus; hit: boolean | null; score: number | null; error?: string | null } | null
   } | null
 }
+
+export type ProviderStatus = 'live' | 'mock' | 'not_configured' | 'unknown' | 'error' | 'timeout'
 
 const HISTORY_KEY = 'scan_history'
 const BACKEND_URL_KEY = 'scan_backend_url'
@@ -195,6 +205,7 @@ function toBackendResult(value: unknown, url: string): ScanResult | null {
     source: 'extension',
     explanation: Array.isArray(data.explanation) ? data.explanation.map(String) : [],
     indicators,
+    evidence: data.evidence && typeof data.evidence === 'object' ? data.evidence as ScanResult['evidence'] : null,
     cti: data.cti && typeof data.cti === 'object' ? data.cti as ScanResult['cti'] : null,
   }
 }

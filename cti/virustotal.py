@@ -30,8 +30,6 @@ class VirusTotalAdapter(BaseCTIAdapter):
                 resp = await client.get(f"{VT_BASE}/urls/{url_id}", headers=self._headers)
 
                 if resp.status_code == 429:
-                    # Rate limit hit — back off and return neutral
-                    await asyncio.sleep(60)
                     return CTIResponse(
                         source="virustotal",
                         status=CTIStatus.ERROR,
@@ -43,16 +41,16 @@ class VirusTotalAdapter(BaseCTIAdapter):
                     )
 
                 if resp.status_code == 404:
-                    await client.post(f"{VT_BASE}/urls", data={"url": url}, headers=self._headers)
                     return CTIResponse(
                         source="virustotal",
                         status=CTIStatus.LIVE,
                         hit=False,
                         score=0.0,
-                        details={"status": "submitted_for_analysis"},
+                        details={"status": "not_found", "submitted_for_analysis": False},
                         latency_ms=int((time.perf_counter() - started) * 1000),
                     )
 
+                resp.raise_for_status()
                 data = resp.json()
                 stats = (
                     data.get("data", {})

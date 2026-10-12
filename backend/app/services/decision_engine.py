@@ -43,12 +43,16 @@ class DecisionEngine:
             by_source["whois"].status == CTIStatus.LIVE and by_source["whois"].hit is True
         )
 
-        statuses = [result.status for result in by_source.values()]
-        if not statuses:
-            scan_mode = ScanMode.FAILED
-        elif all(status == CTIStatus.LIVE for status in statuses):
+        configured_statuses = [
+            result.status
+            for result in by_source.values()
+            if result.status != CTIStatus.NOT_CONFIGURED
+        ]
+        if not configured_statuses:
+            scan_mode = ScanMode.ML_ONLY
+        elif all(status == CTIStatus.LIVE for status in configured_statuses):
             scan_mode = ScanMode.FULL
-        elif all(status in {CTIStatus.UNKNOWN, CTIStatus.ERROR, CTIStatus.TIMEOUT} for status in statuses):
+        elif all(status in {CTIStatus.UNKNOWN, CTIStatus.ERROR, CTIStatus.TIMEOUT} for status in configured_statuses):
             scan_mode = ScanMode.ML_ONLY
         else:
             scan_mode = ScanMode.DEGRADED
@@ -78,21 +82,26 @@ class DecisionEngine:
             cnt = vt.details.get("malicious_count", "?")
             total = vt.details.get("total_engines", "?")
             explanation.append(f"VirusTotal flagged the URL ({cnt}/{total} engines)")
-        elif vt and vt.status != CTIStatus.LIVE:
+        elif vt and vt.status not in {CTIStatus.LIVE, CTIStatus.NOT_CONFIGURED}:
             explanation.append(f"VirusTotal status: {vt.status.value}")
 
         uh = by_source.get("urlhaus")
         if uh and uh.status == CTIStatus.LIVE and uh.hit:
             explanation.append("URLhaus has a matching malicious URL record")
-        elif uh and uh.status != CTIStatus.LIVE:
+        elif uh and uh.status not in {CTIStatus.LIVE, CTIStatus.NOT_CONFIGURED}:
             explanation.append(f"URLhaus status: {uh.status.value}")
 
         whois = by_source.get("whois")
         if whois and whois.status == CTIStatus.LIVE and whois.hit:
             age = whois.details.get("domain_age_days", "?")
             explanation.append(f"WHOIS reports a newly registered domain ({age} days old)")
-        elif whois and whois.status != CTIStatus.LIVE:
+        elif whois and whois.status not in {CTIStatus.LIVE, CTIStatus.NOT_CONFIGURED}:
             explanation.append(f"WHOIS status: {whois.status.value}")
+
+        if not live_confirmed_hit:
+            explanation.append(
+                "No live threat-intelligence match is not proof that the URL is safe"
+            )
 
         if scan_mode != ScanMode.FULL and not live_confirmed_hit and verdict != RiskLevel.MALICIOUS:
             explanation.append("Final verdict was limited because CTI corroboration was unavailable or non-live")

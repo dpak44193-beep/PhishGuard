@@ -1,7 +1,7 @@
 """Map a calibrated score to a risk level and build human-readable explanations."""
 from typing import Iterable
 
-from cti.base import CTIResponse
+from cti.base import CTIResponse, CTIStatus
 
 
 DEFAULT_THRESHOLDS = {"safe": 0.25, "suspicious": 0.60}
@@ -21,12 +21,22 @@ def compute_risk_score(
     suspicious_threshold = thresholds.get("suspicious", DEFAULT_THRESHOLDS["suspicious"])
 
     by_source = {r.source: r for r in cti_results}
-    has_cti_hit = any(r.hit for r in by_source.values())
+    has_cti_hit = any(
+        by_source[source].status == CTIStatus.LIVE
+        and by_source[source].hit is True
+        for source in ("virustotal", "urlhaus")
+        if source in by_source
+    )
+    whois_hit = (
+        by_source.get("whois") is not None
+        and by_source["whois"].status == CTIStatus.LIVE
+        and by_source["whois"].hit is True
+    )
 
     if score < safe_threshold:
-        level = "safe"
+        level = "no_threat_detected"
     elif score < suspicious_threshold:
-        level = "suspicious"
+        level = "suspicious" if whois_hit else "no_threat_detected"
     elif has_cti_hit or score >= 0.985:
         level = "malicious"
     else:
@@ -38,21 +48,23 @@ def compute_risk_score(
         explanation.append(f"ML classifier: {ml_probability:.1%} phishing probability")
 
     vt = by_source.get("virustotal")
-    if vt and vt.hit:
+    if vt and vt.status == CTIStatus.LIVE and vt.hit is True:
         cnt = vt.details.get("malicious_count", "?")
         total = vt.details.get("total_engines", "?")
         explanation.append(f"VirusTotal: {cnt}/{total} engines flagged as malicious")
 
     uh = by_source.get("urlhaus")
-    if uh and uh.hit:
+    if uh and uh.status == CTIStatus.LIVE and uh.hit is True:
         explanation.append("URL matches URLhaus malware/phishing database (abuse.ch)")
 
     ws = by_source.get("whois")
-    if ws and ws.hit:
+    if ws and ws.status == CTIStatus.LIVE and ws.hit is True:
         age = ws.details.get("domain_age_days", ws.details.get("age_days", "?"))
         explanation.append(f"Domain is only {age} days old — newly registered domains carry elevated risk")
 
     if level == "suspicious" and score >= suspicious_threshold and not has_cti_hit:
         explanation.append("High model confidence without independent CTI corroboration")
+    if not has_cti_hit:
+        explanation.append("No live threat-intelligence match is not proof that the URL is safe")
 
     return score, level, explanation
