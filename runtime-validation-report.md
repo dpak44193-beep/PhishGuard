@@ -1,5 +1,7 @@
 # PhishGuard real-data training and runtime validation
 
+> **Historical run notice (2026-10-12):** The checks below record a prior runtime session. They do not verify the exact artifact loaded by the currently running API process. Current read-only health/history checks and artifact evidence are summarized in [audit_report.md](./audit_report.md); do not infer that the production artifact changed or that the false positive was fixed.
+
 **Run date:** 2026-10-12
 **Status:** False-positive investigation completed; regression coverage added. The existing model still misclassifies two legitimate reference URLs, recorded as expected failures. Real-world performance is not established and the artifact is not promoted.
 

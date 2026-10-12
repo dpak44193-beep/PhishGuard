@@ -1,5 +1,7 @@
 # PhishGuard Project Audit
 
+> **Historical audit notice (2026-10-12):** This audit predates the current artifact/configuration verification. It documents the isolated v3 run, not proof that v3 is loaded by the API now. The current default from repository settings is `base-model-v2`; its embedded derived-data hash conflicts with the current manifest. See [audit_report.md](./audit_report.md) for the latest audit. The `example.com` false positive remains unresolved.
+
 **Audit date:** 2026-10-12
 **Overall result:** A real-data model artifact was trained and evaluated on a registrable-domain-grouped holdout, and the API/dashboard/extension local flows were exercised. Results remain internal same-source metrics, not independent or future-time performance evidence. The reserved-domain false positive is traced to an exact feature-signature collision with phishing-only records in the prepared corpus. It remains unresolved and blocks promotion.
 

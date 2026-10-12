@@ -1,5 +1,7 @@
 # PhishGuard — Technical Report
 
+> **Historical report notice (2026-10-12):** This document records an earlier v3 run. The current audit found repository settings default to the distinct `base-model-v2` artifact, whose recorded dataset hash does not match the current prepared corpus. The exact artifact loaded by the currently running API is not exposed by its health route or latest stored history record. See [audit_report.md](./audit_report.md), [dataset_audit.md](./dataset_audit.md), and [evaluation_report.md](./evaluation_report.md) for current, verified distinctions and limitations. The historical false positive described below is still unresolved.
+
 **Project:** ML-Powered Phishing URL Detection with Real-Time CTI Enrichment
 **Audit date:** 2026-10-12
 **Stack:** Python 3.12.13 · FastAPI · scikit-learn/XGBoost · React 18 · Chrome MV3

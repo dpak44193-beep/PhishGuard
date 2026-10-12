@@ -17,6 +17,7 @@ env/
 ml/models/artifacts/**/*.joblib
 ml/models/artifacts/**/*.pkl
 ml/models/artifacts/**/*.h5
+ml/models/artifacts/experiments/
 ml/data/raw/
 ml/data/processed/
 

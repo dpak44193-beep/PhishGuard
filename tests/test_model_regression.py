@@ -83,6 +83,26 @@ def test_saved_model_and_runtime_share_feature_and_preprocessing_contract(
         assert MLService.predict(vector) == round(float(model_probability), 4)
 
 
+def test_default_artifact_infers_with_the_live_30_feature_schema(monkeypatch):
+    default_model_path = ROOT / "ml" / "models" / "artifacts" / "phishguard_model.joblib"
+    if not default_model_path.is_file():
+        pytest.skip("The ignored local default model artifact is not available.")
+
+    bundle = joblib.load(default_model_path)
+    assert bundle["feature_order"] == FEATURE_ORDER
+    model = bundle["base_model"]
+    assert model.n_features_in_ == len(FEATURE_ORDER)
+
+    vector = EXTRACTOR.to_vector(EXTRACTOR.extract("https://example.com/"))
+    direct_probability = float(model.predict_proba(vector.reshape(1, -1))[0, 1])
+    assert np.isfinite(direct_probability)
+    assert 0.0 <= direct_probability <= 1.0
+
+    monkeypatch.setattr(settings, "ml_model_path", str(default_model_path))
+    monkeypatch.setattr(MLService, "_bundle", None)
+    assert MLService.predict(vector) == round(direct_probability, 4)
+
+
 def test_example_com_vector_collision_is_visible_in_labeled_training_data(
     labeled_dataset,
 ):
